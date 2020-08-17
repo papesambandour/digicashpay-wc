@@ -49,9 +49,9 @@ function woocommerce_digicashpay_init() {
             $this->public_key =$this->settings['public_key'];
             $this->env  = $this->settings['env'];
             //$this->fee  = $this->settings['fee'];
-         //   $this->color = $this->settings['color'];
-          //  $this->color2 = $this->settings['color2 '];
-          //  $this->devise  = $this->settings['devise'];
+            //   $this->color = $this->settings['color'];
+            //  $this->color2 = $this->settings['color2 '];
+            //  $this->devise  = $this->settings['devise'];
             $this->digicashpay_host= 'https://digicashpay-proxy.herokuapp.com/';
             $this->posturl = $this->digicashpay_host.'api/payment/request';
             $this->submit_id = 0;
@@ -159,28 +159,28 @@ function woocommerce_digicashpay_init() {
                     'type' => 'select',
                     'options'=>$this->getcurren(),
                 ),
-               /* 'fee' => array(
-                    'title' => __("Commissions", 'digicashpay'),
-                    'description' => __('Choisir qui paye les commissions.'),
-                    'css'=>'padding:0%;',
-                    'type' => 'select',
-                    'options'=>array('1' => 'Commissions payées par Votre structure', '0'=>'Commissions payées par le client'),
+                /* 'fee' => array(
+                     'title' => __("Commissions", 'digicashpay'),
+                     'description' => __('Choisir qui paye les commissions.'),
+                     'css'=>'padding:0%;',
+                     'type' => 'select',
+                     'options'=>array('1' => 'Commissions payées par Votre structure', '0'=>'Commissions payées par le client'),
+                 )
+                 ,*/
+                /*  'color' => array(
+                      'title' => 'Couleur 1',
+                      'description' => __('Choississez la couleur de colonne à gauche.'),
+                      'css'=>'padding:5px;',
+                      'type' => 'color',
+                  )
+                  ,
+                'color2' => array(
+                    'title' => 'Couleur 2',
+                    'description' => __('Choississez la couleur de colonne à droite.'),
+                    'css'=>'padding:5px;',
+                    'type' => 'color',
                 )
-                ,*/
-            /*  'color' => array(
-                  'title' => 'Couleur 1',
-                  'description' => __('Choississez la couleur de colonne à gauche.'),
-                  'css'=>'padding:5px;',
-                  'type' => 'color',
-              )
-              ,
-            'color2' => array(
-                'title' => 'Couleur 2',
-                'description' => __('Choississez la couleur de colonne à droite.'),
-                'css'=>'padding:5px;',
-                'type' => 'color',
-            )
-*/
+    */
 
 
             );
@@ -255,7 +255,7 @@ function woocommerce_digicashpay_init() {
                 "app_key"       => $opt['app_key'],  //"xof",
                 "secrete_key"       => $opt['secrete_key'],  //"xof",
                 "public_key"       => $opt['public_key'],  //"xof",
-              //  "no_calculate_fee" => $opt['fee'],
+                //  "no_calculate_fee" => $opt['fee'],
                 "ref_commande"  =>$order->id.'_'.time(),
                 "commande_name" =>"Achat " . $order->order_total . " ".$opt['devise']." pour article(s) achetés sur " . get_bloginfo("name"),
                 "mode"          => $opt['env'],
@@ -301,7 +301,7 @@ function woocommerce_digicashpay_init() {
 
             if(array_key_exists('error', $jsonResponse) && $jsonResponse['error']===false)
             {
-              $url = $jsonResponse['data']['url_payment'] /*. $this->getTheme()*/;
+                $url = $jsonResponse['data']['url_payment'] /*. $this->getTheme()*/;
                 return $url ;
 
 
@@ -387,12 +387,12 @@ function woocommerce_digicashpay_init() {
             array_unshift($links, $settings_link);
             return $links;
         }
-       function getTheme(){
-          $theme = json_decode('{"pageBackgroundRadianStart":"#0178bc","pageBackgroundRadianEnd":"#00bdda","pageTextPrimaryColor":"#333","paymentFormBackground":"#fff","navControlNextBackgroundRadianStart":"#608d93","navControlNextBackgroundRadianEnd":"#28314e","navControlCancelBackgroundRadianStar":"#28314e","navControlCancelBackgroundRadianEnd":"#608d93","navControlTextColor":"#fff","paymentListItemTextColor":"#555","paymentListItemSelectedBackground":"#eee","commingIconBackgroundRadianStart":"#0178bc","commingIconBackgroundRadianEnd":"#00bdda","commingIconTextColor":"#fff","formInputBackgroundColor":"#eff1f2","formInputBorderTopColor":"#e3e7eb","formInputBorderLeftColor":"#7c7c7c","totalIconBackgroundRadianStart":"#0178bc","totalIconBackgroundRadianEnd":"#00bdda","formLabelTextColor":"#292b2c","alertDialogTextColor":"#333","alertDialogConfirmButtonBackgroundColor":"#0178bc","alertDialogConfirmButtonTextColor":"#fff"}');
-          // $theme->pageBackgroundRadianStart = $this->color  ;
-          //  $theme->pageBackgroundRadianEnd = $this->color2 ;
-          //  $theme64 = base64_encode(json_encode($theme));
-          //  return $query = "?t=".$theme64 ;
+        function getTheme(){
+            $theme = json_decode('{"pageBackgroundRadianStart":"#0178bc","pageBackgroundRadianEnd":"#00bdda","pageTextPrimaryColor":"#333","paymentFormBackground":"#fff","navControlNextBackgroundRadianStart":"#608d93","navControlNextBackgroundRadianEnd":"#28314e","navControlCancelBackgroundRadianStar":"#28314e","navControlCancelBackgroundRadianEnd":"#608d93","navControlTextColor":"#fff","paymentListItemTextColor":"#555","paymentListItemSelectedBackground":"#eee","commingIconBackgroundRadianStart":"#0178bc","commingIconBackgroundRadianEnd":"#00bdda","commingIconTextColor":"#fff","formInputBackgroundColor":"#eff1f2","formInputBorderTopColor":"#e3e7eb","formInputBorderLeftColor":"#7c7c7c","totalIconBackgroundRadianStart":"#0178bc","totalIconBackgroundRadianEnd":"#00bdda","formLabelTextColor":"#292b2c","alertDialogTextColor":"#333","alertDialogConfirmButtonBackgroundColor":"#0178bc","alertDialogConfirmButtonTextColor":"#fff"}');
+            // $theme->pageBackgroundRadianStart = $this->color  ;
+            //  $theme->pageBackgroundRadianEnd = $this->color2 ;
+            //  $theme64 = base64_encode(json_encode($theme));
+            //  return $query = "?t=".$theme64 ;
         }
 
     }
