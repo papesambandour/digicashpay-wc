@@ -246,6 +246,9 @@ function woocommerce_digicashpay_init() {
             $opt = get_settings('woocommerce_digicashpay_settings', array() );
 
             //dame arguments
+
+            $cancel_url=  strpos($redirect_url,"?") === false ? $redirect_url.'?cancel=1' : $redirect_url.'&cancel=1' ;
+            $success_url=  strpos($redirect_url,"?") === false ? $redirect_url.'?success=1' : $redirect_url.'&success=1' ;
             $postfields = array(
                 "amount"   => $order->order_total,
                 "currency"       => $opt['devise'],  //"xof",
@@ -256,7 +259,10 @@ function woocommerce_digicashpay_init() {
                 "ref_commande"  =>$order->id.'_'.time(),
                 "commande_name" =>"Achat " . $order->order_total . " ".$opt['devise']." pour article(s) achetés sur " . get_bloginfo("name"),
                 "mode"          => $opt['env'],
-                "success_url" =>$redirect_url.'?success=1',
+                "success_url" => $success_url,
+                "ipn_url"=>  get_site_url(null,'','https')  ."/digicashpay/ipn",
+                "cancel_url"   => $cancel_url,
+                "failed_url"   =>$cancel_url,
                 "data_transactions"=> json_encode([
                     'order' => $order_id,
                     'order_id' => $order->get_id(),
@@ -289,7 +295,7 @@ function woocommerce_digicashpay_init() {
 
             $jsonResponse = json_decode($response, true);
 //             echo "<pre>";
-//             var_dump($jsonResponse);die;
+//             var_dump($data);die;
 
             WC()->session->set('digicashpay_wc_oder_id', $order_id);
 
@@ -402,7 +408,7 @@ function woocommerce_digicashpay_init() {
     add_filter('woocommerce_payment_gateways', array('WC_Digicashpay', 'woocommerce_add_digicashpay_gateway'));
 
 
-    $pay_express_ipn_confirm = function (){
+    $digipay_ipn = function (){
 
 
         if($_SERVER[ 'REQUEST_URI'] === "/digicashpay/ipn" ){
@@ -411,7 +417,7 @@ function woocommerce_digicashpay_init() {
             if(isset($_POST['type_event']))
             {
                 $res = $_POST['type_event'];
-                if($res === 'sale_complete' && hash('sha256', $options['app_key']) === $_POST['api_key_sha256'] && hash('sha256', $options['secret_key']) === $_POST['api_secret_sha256'])
+                if($res === 'sale_complete' && hash('sha256', $options['public_key']) === $_POST['public_key_sha256'] && hash('sha256', $options['secrete_key']) === $_POST['secrete_key_sha256'])
                 {
                     global $woocommerce;
 
@@ -430,12 +436,12 @@ function woocommerce_digicashpay_init() {
                 }
             }
 
-            die('FAILLED');
+            die('Echec validation');
         }
 
     };
 
-    $pay_express_ipn_confirm();
+    $digipay_ipn();
 
 
 }
