@@ -44,11 +44,12 @@ function woocommerce_digicashpay_init() {
             $this->title = $this->settings['title'];
             $this->description = $this->settings['description'];
             //Mes parametres
-            $this->api_key =$this->settings['api_key'];
-            $this->secret_key =$this->settings['secret_key'];
+            $this->app_key =$this->settings['app_key'];
+            $this->secrete_key =$this->settings['secrete_key'];
+            $this->public_key =$this->settings['public_key'];
             $this->env  = $this->settings['env'];
-            $this->fee  = $this->settings['fee'];
-            $this->color = $this->settings['color'];
+            //$this->fee  = $this->settings['fee'];
+         //   $this->color = $this->settings['color'];
           //  $this->color2 = $this->settings['color2 '];
           //  $this->devise  = $this->settings['devise'];
             $this->digicashpay_host= 'https://digicashpay-proxy.herokuapp.com/';
@@ -119,49 +120,53 @@ function woocommerce_digicashpay_init() {
                 'enabled' => array(
                     'title' => __('Activer/Désactiver', 'digicashpay'),
                     'type' => 'checkbox',
-                    'label' => __('Activer le module de paiement DIGICASHPAY.', 'digicashpay'),
+                    'label' => __('Activation du module de paiement DIGICASHPAY.', 'digicashpay'),
                     'default' => 'no'),
                 'title' => array(
                     'title' => __('Titre:', 'digicashpay'),
                     'type' => 'text',
                     'description' => __('Texte que verra le client lors du paiement de sa commande.', 'digicashpay'),
-                    'default' => __('Paiement avec', 'digicashpay')),
+                    'default' => __('Paiement avec Digicash', 'digicashpay')),
                 'description' => array(
                     'title' => __('Description:', 'digicashpay'),
                     'type' => 'textarea',
                     'description' => __('Description que verra le client lors du paiement de sa commande.', 'digicashpay'),
-                    'default' => __('Digicashpay est une passerelle qui assure  la sécurité de vos transactions .', 'digicashpay')),
+                    'default' => __('Digicashpay est une passerelle de paiement en ligne developper par la societe B&G Digital .', 'digicashpay')),
 
-                'api_key' => array(
+                'app_key' => array(
                     'title' => __("Clé de l'api", 'digicashpay'),
                     'type' => 'text',
-                    'description' => __("Clé de l'api fournie par DIGICASHPAY ")),
-                'secret_key' => array(
+                    'description' => __("Identifiant de l'application lié au boutique en ligne")),
+                'secrete_key' => array(
                     'title' => __("Clé secrete de l'api", 'digicashpay'),
                     'type' => 'text',
-                    'description' => __('Clé secrete fournie par DIGICASHPAY .')),
+                    'description' => __('Clé secrete de securité de l\'application a voir dans l\'espace client partie application')),
+                'public_key' => array(
+                    'title' => __("Clé public de l'application", 'digicashpay'),
+                    'type' => 'text',
+                    'description' => __('Clé secrete de public de l\'application a voir dans l\'espace client partie application')),
                 'env' => array(
                     'title' => __("Environnement", 'digicashpay'),
-                    'description' => __('Votre envirionnement de travail TEST ou PRODUCTION.'),
+                    'description' => __('L\'environement de l\'application. mode teste ou production'),
                     'css'=>'padding:0%;',
                     'type' => 'select',
-                    'options'=>array('prod' => 'Production', 'test'=>'Test'),
+                    'options'=>array('test'=>'Test','prod' => 'Production'),
                 ),
                 'devise' => array(
                     'title' => __("Dévise", 'digicashpay'),
                     'description' => __('Choisir une dévise.'),
                     'css'=>'padding:0%;',
                     'type' => 'select',
-                    'options'=>array('XOF' => 'XOF', 'EUR'=>'EURO','CAD'=>'CAD','GBP'=>'gbp','USD'=>'USD','MAD'=>'MAD'),
+                    'options'=>$this->getcurren(),
                 ),
-                'fee' => array(
+               /* 'fee' => array(
                     'title' => __("Commissions", 'digicashpay'),
                     'description' => __('Choisir qui paye les commissions.'),
                     'css'=>'padding:0%;',
                     'type' => 'select',
                     'options'=>array('1' => 'Commissions payées par Votre structure', '0'=>'Commissions payées par le client'),
                 )
-                ,
+                ,*/
             /*  'color' => array(
                   'title' => 'Couleur 1',
                   'description' => __('Choississez la couleur de colonne à gauche.'),
@@ -179,6 +184,18 @@ function woocommerce_digicashpay_init() {
 
 
             );
+        }
+        public function getcurren(){
+
+            $rest =  json_decode("[{\"XOF\":\"XOF\"},{\"EUR\":\"EUR\"},{\"USD\":\"USD\"},{\"XDR\":\"XDR\"},{\"AED\":\"AED\"},{\"AFN\":\"AFN\"},{\"ALL\":\"ALL\"},{\"AMD\":\"AMD\"},{\"ANG\":\"ANG\"},{\"AOA\":\"AOA\"},{\"ARS\":\"ARS\"},{\"AUD\":\"AUD\"},{\"AWG\":\"AWG\"},{\"AZN\":\"AZN\"},{\"BAM\":\"BAM\"},{\"BBD\":\"BBD\"},{\"BDT\":\"BDT\"},{\"BGN\":\"BGN\"},{\"BHD\":\"BHD\"},{\"BIF\":\"BIF\"},{\"BMD\":\"BMD\"},{\"BND\":\"BND\"},{\"BOB\":\"BOB\"},{\"BRL\":\"BRL\"},{\"BSD\":\"BSD\"},{\"BTC\":\"BTC\"},{\"BTN\":\"BTN\"},{\"BWP\":\"BWP\"},{\"BYN\":\"BYN\"},{\"BZD\":\"BZD\"},{\"CAD\":\"CAD\"},{\"CDF\":\"CDF\"},{\"CHF\":\"CHF\"},{\"CLF\":\"CLF\"},{\"CLP\":\"CLP\"},{\"CNH\":\"CNH\"},{\"CNY\":\"CNY\"},{\"COP\":\"COP\"},{\"CRC\":\"CRC\"},{\"CUC\":\"CUC\"},{\"CUP\":\"CUP\"},{\"CVE\":\"CVE\"},{\"CZK\":\"CZK\"},{\"DJF\":\"DJF\"},{\"DKK\":\"DKK\"},{\"DOP\":\"DOP\"},{\"DZD\":\"DZD\"},{\"EGP\":\"EGP\"},{\"ERN\":\"ERN\"},{\"ETB\":\"ETB\"},{\"FJD\":\"FJD\"},{\"FKP\":\"FKP\"},{\"GBP\":\"GBP\"},{\"GEL\":\"GEL\"},{\"GGP\":\"GGP\"},{\"GHS\":\"GHS\"},{\"GIP\":\"GIP\"},{\"GMD\":\"GMD\"},{\"GNF\":\"GNF\"},{\"GTQ\":\"GTQ\"},{\"GYD\":\"GYD\"},{\"HKD\":\"HKD\"},{\"HNL\":\"HNL\"},{\"HRK\":\"HRK\"},{\"HTG\":\"HTG\"},{\"HUF\":\"HUF\"},{\"IDR\":\"IDR\"},{\"ILS\":\"ILS\"},{\"IMP\":\"IMP\"},{\"INR\":\"INR\"},{\"IQD\":\"IQD\"},{\"IRR\":\"IRR\"},{\"ISK\":\"ISK\"},{\"JEP\":\"JEP\"},{\"JMD\":\"JMD\"},{\"JOD\":\"JOD\"},{\"JPY\":\"JPY\"},{\"KES\":\"KES\"},{\"KGS\":\"KGS\"},{\"KHR\":\"KHR\"},{\"KMF\":\"KMF\"},{\"KPW\":\"KPW\"},{\"KRW\":\"KRW\"},{\"KWD\":\"KWD\"},{\"KYD\":\"KYD\"},{\"KZT\":\"KZT\"},{\"LAK\":\"LAK\"},{\"LBP\":\"LBP\"},{\"LKR\":\"LKR\"},{\"LRD\":\"LRD\"},{\"LSL\":\"LSL\"},{\"LYD\":\"LYD\"},{\"MAD\":\"MAD\"},{\"MDL\":\"MDL\"},{\"MGA\":\"MGA\"},{\"MKD\":\"MKD\"},{\"MMK\":\"MMK\"},{\"MNT\":\"MNT\"},{\"MOP\":\"MOP\"},{\"MRO\":\"MRO\"},{\"MRU\":\"MRU\"},{\"MUR\":\"MUR\"},{\"MVR\":\"MVR\"},{\"MWK\":\"MWK\"},{\"MXN\":\"MXN\"},{\"MYR\":\"MYR\"},{\"MZN\":\"MZN\"},{\"NAD\":\"NAD\"},{\"NGN\":\"NGN\"},{\"NIO\":\"NIO\"},{\"NOK\":\"NOK\"},{\"NPR\":\"NPR\"},{\"NZD\":\"NZD\"},{\"OMR\":\"OMR\"},{\"PAB\":\"PAB\"},{\"PEN\":\"PEN\"},{\"PGK\":\"PGK\"},{\"PHP\":\"PHP\"},{\"PKR\":\"PKR\"},{\"PLN\":\"PLN\"},{\"PYG\":\"PYG\"},{\"QAR\":\"QAR\"},{\"RON\":\"RON\"},{\"RSD\":\"RSD\"},{\"RUB\":\"RUB\"},{\"RWF\":\"RWF\"},{\"SAR\":\"SAR\"},{\"SBD\":\"SBD\"},{\"SCR\":\"SCR\"},{\"SDG\":\"SDG\"},{\"SEK\":\"SEK\"},{\"SGD\":\"SGD\"},{\"SHP\":\"SHP\"},{\"SLL\":\"SLL\"},{\"SOS\":\"SOS\"},{\"SRD\":\"SRD\"},{\"SSP\":\"SSP\"},{\"STD\":\"STD\"},{\"STN\":\"STN\"},{\"SVC\":\"SVC\"},{\"SYP\":\"SYP\"},{\"SZL\":\"SZL\"},{\"THB\":\"THB\"},{\"TJS\":\"TJS\"},{\"TMT\":\"TMT\"},{\"TND\":\"TND\"},{\"TOP\":\"TOP\"},{\"TRY\":\"TRY\"},{\"TTD\":\"TTD\"},{\"TWD\":\"TWD\"},{\"TZS\":\"TZS\"},{\"UAH\":\"UAH\"},{\"UGX\":\"UGX\"},{\"UYU\":\"UYU\"},{\"UZS\":\"UZS\"},{\"VEF\":\"VEF\"},{\"VES\":\"VES\"},{\"VND\":\"VND\"},{\"VUV\":\"VUV\"},{\"WST\":\"WST\"},{\"XAF\":\"XAF\"},{\"XAG\":\"XAG\"},{\"XAU\":\"XAU\"},{\"XCD\":\"XCD\"},{\"XPD\":\"XPD\"},{\"XPF\":\"XPF\"},{\"XPT\":\"XPT\"},{\"YER\":\"YER\"},{\"ZAR\":\"ZAR\"},{\"ZMW\":\"ZMW\"},{\"ZWL\":\"ZWL\"}]",true);
+            $return=[];
+            foreach ($rest as $one){
+
+                foreach($one as $key){
+                    $return[$key] =   $key;break;
+                }
+            }
+            return $return ;
         }
 
         public function admin_options() {
@@ -230,17 +247,17 @@ function woocommerce_digicashpay_init() {
 
             //dame arguments
             $postfields = array(
-                "item_name"    =>$produit,
-                "item_price"   =>$order->order_total,
+                "amount"   => $order->order_total,
                 "currency"       => $opt['devise'],  //"xof",
-                "no_calculate_fee" => $opt['fee'],
-                "ref_command"  =>$order->id.'_'.time(),
-                "command_name" =>"Paiement de " . $order->order_total . " ".$opt['devise']." pour article(s) achetés sur " . get_bloginfo("name"),
-                "env"          => $opt['env'],
+                "app_key"       => $opt['app_key'],  //"xof",
+                "secrete_key"       => $opt['secrete_key'],  //"xof",
+                "public_key"       => $opt['public_key'],  //"xof",
+              //  "no_calculate_fee" => $opt['fee'],
+                "ref_commande"  =>$order->id.'_'.time(),
+                "commande_name" =>"Achat " . $order->order_total . " ".$opt['devise']." pour article(s) achetés sur " . get_bloginfo("name"),
+                "mode"          => $opt['env'],
                 "success_url" =>$redirect_url.'?success=1',
-                "ipn_url"=>  get_site_url(null,'','https')  ."/digicashpay/ipn",
-                "cancel_url"   =>$redirect_url.'?cancel=1',
-                "custom_field"=> json_encode([
+                "data_transactions"=> json_encode([
                     'order' => $order_id,
                     'order_id' => $order->get_id(),
                     'order_number' => $order->get_order_number()
@@ -256,7 +273,7 @@ function woocommerce_digicashpay_init() {
         function post($url, $data, $order_id,$header = [])
         {
 
-            $strPostField = http_build_query($data);
+            $strPostField = json_encode($data);
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $strPostField);
@@ -264,33 +281,36 @@ function woocommerce_digicashpay_init() {
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge($header, [
-                'Content-Type: application/x-www-form-urlencoded;charset=utf-8',
-                'Content-Length: ' . mb_strlen($strPostField)
+                'Content-Type: application/json'
             ]));
 
             $response = curl_exec($ch);
 
 
             $jsonResponse = json_decode($response, true);
+//             echo "<pre>";
+//             var_dump($jsonResponse);die;
 
             WC()->session->set('digicashpay_wc_oder_id', $order_id);
 
-            if(array_key_exists('token', $jsonResponse))
+            if(array_key_exists('error', $jsonResponse) && $jsonResponse['error']===false)
             {
-              $url = $this->digicashpay_host.'payment/checkout/'.$jsonResponse['token'] /*. $this->getTheme()*/;
+              $url = $jsonResponse['data']['url_payment'] /*. $this->getTheme()*/;
                 return $url ;
 
 
             }
             else {
-                if(array_key_exists('error', $jsonResponse))
-                    wc_add_notice($jsonResponse['error'][0], "error");
-                else
-                    if(array_key_exists('success') && $jsonResponse['success']===-1 )
-                        wc_add_notice($jsonResponse['message'], "error");
+                if(array_key_exists('error', $jsonResponse) && $jsonResponse['error']===true){
+                    wc_add_notice($jsonResponse['msg'], "error");
+                    foreach ($jsonResponse['data'] as $message){
+                        wc_add_notice($message, "error");
 
-                    else
-                        wc_add_notice("Erreur inconnue", "error");
+                    }
+
+                }
+
+
                 return '';
             }
 
@@ -306,8 +326,7 @@ function woocommerce_digicashpay_init() {
             return array(
                 'result' => 'success',
                 'redirect' => $this->post($this->posturl, $this->get_digicashpay_args($order, $order_id), $order_id,[
-                    "API_KEY: ".$this->api_key,
-                    "API_SECRET: ".$this->secret_key
+
                 ])
             );
         }
@@ -392,7 +411,7 @@ function woocommerce_digicashpay_init() {
             if(isset($_POST['type_event']))
             {
                 $res = $_POST['type_event'];
-                if($res === 'sale_complete' && hash('sha256', $options['api_key']) === $_POST['api_key_sha256'] && hash('sha256', $options['secret_key']) === $_POST['api_secret_sha256'])
+                if($res === 'sale_complete' && hash('sha256', $options['app_key']) === $_POST['api_key_sha256'] && hash('sha256', $options['secret_key']) === $_POST['api_secret_sha256'])
                 {
                     global $woocommerce;
 
